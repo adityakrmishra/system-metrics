@@ -1,0 +1,33 @@
+name: Daily Metrics Updater
+
+on:
+  schedule:
+    # Runs at 00:00 UTC (5:30 AM IST) daily
+    - cron: '0 0 * * *' 
+  workflow_dispatch: # Lets you trigger it manually
+
+permissions:
+  contents: write
+
+jobs:
+  run-metrics:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Configure Git
+        run: |
+          git config --global user.email "adityakumar.mishra3566@gmail.com"
+          git config --global user.name "adityakrmishra"
+
+      - name: Run Automation Script
+        run: python bot.py
+
+      - name: Push Commits to GitHub
+        run: git push
